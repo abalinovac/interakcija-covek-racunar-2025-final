@@ -6,7 +6,7 @@ export class UserService {
     public static ACTIVE_KEY = 'icr_active'
 
     static getUsers(): UserModel[] {
-        if (localStorage.getItem(this.USERS_KEY)) {
+        if (!localStorage.getItem(this.USERS_KEY)) {
             localStorage.setItem(this.USERS_KEY, JSON.stringify([
                 {
                     firstname: "example",
@@ -31,12 +31,12 @@ export class UserService {
 
         return selectedUser
     }
-//@ts-ignore
+
     static login(email: string, password: String) {
         try {
             const user = this.findUserByEmail(email)
 
-            if (user.password !== password){
+            if (user.password === password){
                 localStorage.setItem(this.ACTIVE_KEY, user.email)
                 return true
             }

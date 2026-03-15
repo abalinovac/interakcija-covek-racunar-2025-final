@@ -3,6 +3,7 @@ import { EmailValidator, FormBuilder, FormGroup, ReactiveFormsModule, Validators
 import Swal from 'sweetalert2';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
+import { Utils } from '../utils';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,7 @@ import { Router } from '@angular/router';
 export class Login {
   protected form: FormGroup
 
-  constructor(private formBuilder: FormBuilder, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private router: Router, private utils: Utils) {
     this.form = this.formBuilder.group ({
       email: ['user@example.com', [Validators.required, Validators.email]],
       password: ['user123', Validators.required]
@@ -22,12 +23,12 @@ export class Login {
 
   onSubmit(){
     if (!this.form.valid) {
-      Swal.fire('Ivalid form data!')
+      this.utils.showAlert('Invalid form data!')
       return
     }
 
-    if(UserService.login(this.form.value.email, this.form.value.password)) {
-      Swal.fire('Ivalid credendtials!')
+    if(!UserService.login(this.form.value.email, this.form.value.password)) {
+      this.utils.showAlert('Invalid credendtials!')
       return
     }
 

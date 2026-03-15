@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { UserService } from '../services/user.service';
+import { Utils } from './utils';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -12,9 +13,9 @@ import Swal from 'sweetalert2';
 export class App {
   protected year = new Date().getFullYear()
 
-  constructor (private router: Router) {}
+  constructor(private router: Router, private utils: Utils) { }
 
-  getUserName(){
+  getUserName() {
     const user = UserService.getActiveUser()
     return `${user.firstname} ${user.lastname}`
   }
@@ -24,16 +25,13 @@ export class App {
   }
 
   doLogout() {
-    Swal.fire({
-      title: "Are you sure you want to logout?",
-      showCancelButton: true,
-      confirmButtonText: "Logout now",
-      cancelButtonText: `Don't Logout`
-    }).then((result) => {
-      if (result.isConfirmed) {
-        UserService.logout()
-        this.router.navigateByUrl('/login')
-      }
-    })
+    this.utils.showDialog(
+      "Are you sure you want to logout?", () => {
+      UserService.logout()
+      this.router.navigateByUrl('/login')
+    },
+    "Logout now",
+    "Don't Logout"
+  )
   }
 }
