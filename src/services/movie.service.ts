@@ -13,4 +13,8 @@ export class MovieService{
     static async getMovies(search: string = ''){
        return client.get<MovieModel[]>(`https://movie.pequla.com/api/movie?search=${search}`)
     }
+
+    static async getMovieByPermalink(permalink: string){
+        return client.get<MovieModel>(`/movie/short/${permalink}`)
+    }
 }
