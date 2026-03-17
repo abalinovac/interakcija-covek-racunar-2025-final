@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { Home } from './home/home';
 import { About } from './about/about';
 import { Login } from './login/login';
-import { Singup } from './singup/singup';
 import { Movie } from './movie/movie';
 import { Profile } from './profile/profile';
 import { Reservation } from './reservation/reservation';
@@ -15,7 +14,6 @@ export const routes: Routes = [
     {path: 'movie/:path/reservation', component: Reservation, title: 'Movie reservation'},
     {path: 'movie/:path', component: Movie, title: 'Movie'},
     {path: 'login', component: Login, title: 'Login'},
-    {path: 'singup', component: Singup, title: 'Singup'},
     {path: 'profile', component: Profile, title: 'User profile'},
     {path: '**', redirectTo: '' }
 ];
