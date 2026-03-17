@@ -2,7 +2,8 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
-            <a routerLink="/">Home</a></li>
+            <a routerLink="/">Home</a>
+        </li>
         <li class="breadcrumb-item active" aria-current="page">{{movie()?.title}}</li>
     </ol>
 </nav>
@@ -37,9 +38,9 @@
                 </div>
             </div>
             <div class="card-footer">
-                <div class="btn btn-sm btn-success">
+                <a class="btn btn-sm btn-success" [routerLink]="`/movie/${movie()?.shortUrl}/reservation`">
                     <i class="fa-solid fa-cart-shopping"></i> Add to Cart
-                </div>
+                </a>
             </div>
         </div>
     </div>

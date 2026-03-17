@@ -11,27 +11,36 @@ import { Utils } from '../utils';
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
+
 export class Login {
   protected form: FormGroup
 
   constructor(private formBuilder: FormBuilder, private router: Router, private utils: Utils) {
-    this.form = this.formBuilder.group ({
+    this.form = this.formBuilder.group({
       email: ['user@example.com', [Validators.required, Validators.email]],
       password: ['user123', Validators.required]
     })
+
   }
 
-  onSubmit(){
+
+
+  onSubmit() {
     if (!this.form.valid) {
       this.utils.showAlert('Invalid form data!')
       return
     }
-
-    if(!UserService.login(this.form.value.email, this.form.value.password)) {
+    if (!UserService.login(this.form.value.email, this.form.value.password)) {
       this.utils.showAlert('Invalid credendtials!')
       return
     }
 
-    this.router.navigateByUrl('/')
+    let to = '/'
+    if (localStorage.getItem(UserService.TO_KEY)) {
+      to = localStorage.getItem(UserService.TO_KEY)!
+      localStorage.removeItem(UserService.TO_KEY)
+    }
+
+    this.router.navigateByUrl(to)
   }
 }

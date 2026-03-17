@@ -20,6 +20,10 @@
         </li>
         @if (hasAuth()){
         <li class="nav-item">
+          <a class="nav-link" routerLink="/profile" routerLinkActive="active">
+            <i class="fa-solid fa-user"></i>Profile</a>
+        </li>
+        <li class="nav-item">
           <button type="button" class="nav-link" (click)="doLogout()">
             Logout
           </button>
