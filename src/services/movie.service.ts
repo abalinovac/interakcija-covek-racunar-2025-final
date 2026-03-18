@@ -1,5 +1,6 @@
 import axios from "axios";
 import { MovieModel } from "../models/movie.model";
+import { GenreModel } from "../models/genres.model";
 
 const client = axios.create({
     baseURL: 'https://movie.pequla.com/api',
@@ -10,11 +11,22 @@ const client = axios.create({
 })
 
 export class MovieService{
-    static async getMovies(search: string = ''){
-       return client.get<MovieModel[]>(`https://movie.pequla.com/api/movie?search=${search}`)
+    static async getMovies(search: string = '', genre: number = 0){
+       return client.request<MovieModel[]>({
+        url: '/movie',
+        method: 'get',
+        params: {
+            'search': search,
+            'genre': genre
+        }
+       })
     }
 
     static async getMovieByPermalink(permalink: string){
         return client.get<MovieModel>(`/movie/short/${permalink}`)
+    }
+
+    static async getGenres(){
+        return client.get<GenreModel[]>(`/genre`)
     }
 }

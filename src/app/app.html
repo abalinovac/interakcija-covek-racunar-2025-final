@@ -65,7 +65,7 @@
           }
           @if(msg.type == 'bot'){
           <div class="text-start">
-            <div class="badge bg-secondary text-white msg-content">{{msg.text}}</div>
+            <div class="badge bg-secondary text-white msg-content text-start" [innerHTML]="msg.text"></div>
           </div>
           }
           @if(msg.type == 'error'){
