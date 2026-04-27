@@ -49,6 +49,23 @@ nlu:
     - any new arrivals in the movie category
     - give me some fresh cinematic suggestions
 
+- intent: search_movies
+  examples: |
+    - search movies for [brutalista](search_criteria)
+    - search movies for [inception](search_criteria)
+    - search movies for [the godfather](search_criteria)
+    - search movies for [interstellar](search_criteria)
+    - please find movies by [tarantino](search_criteria)
+    - movies like [avatar](search_criteria)
+    - movies like [the matrix](search_criteria)
+    
+- regex: search_criteria
+  examples: |
+    - (?<=movies for ).*
+    - (?<=movies by ).*
+    - (?<=search for ).*
+    - (?<=movies like ).*
+
 - intent: goodbye
   examples: |
     - cu

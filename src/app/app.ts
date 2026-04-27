@@ -7,7 +7,6 @@ import { RasaService } from '../services/rasa.service';
 import { FormsModule } from '@angular/forms';
 import { MovieService } from '../services/movie.service';
 import { MovieModel } from '../models/movie.model';
-import { AxiosResponse } from 'axios';
 
 @Component({
   selector: 'app-root',
@@ -35,22 +34,23 @@ export class App {
   }
 
   async sendUserMessage() {
-    if (this.waitingForResponse) return
+    if (this.waitingForResponse || !this.userMessage.trim()) return
 
     const trimmedMessage = this.userMessage.trim()
     this.userMessage = ''
+    this.waitingForResponse = true
 
-    this.messages.push({
-      type: 'user',
-      text: trimmedMessage
-    })
-    this.messages.push({
-      type: 'bot',
-      text: this.botThinkingPlaceholder
-    })
+    // 1. Dodajemo korisničku poruku
+    this.messages.push({ type: 'user', text: trimmedMessage })
+    
+    // 2. Dodajemo placeholder dok bot "razmišlja"
+    this.messages.push({ type: 'bot', text: this.botThinkingPlaceholder })
 
     RasaService.sendMessage(trimmedMessage)
       .then(rsp => {
+        this.removeBotPlaceholder()
+        this.waitingForResponse = false
+
         if (rsp.data.length == 0) {
           this.messages.push({
             type: 'bot',
@@ -60,184 +60,77 @@ export class App {
         }
 
         for (let message of rsp.data) {
+          // PRVO: Provera attachment-a (ako postoji)
           if (message.attachment != null) {
-            // Returns movie list
+            let html = ''
+
+            // Slučaj: movie_list
             if (message.attachment.type == 'movie_list' && Array.isArray(message.attachment.data)) {
-              let html = ''
               for (let movie of message.attachment.data as MovieModel[]) {
+                html += `<div style="border-bottom: 1px solid #444; margin-bottom: 10px; padding-bottom: 5px;">`
                 html += `<ul class='list-unstyled'>`
-                html += `<li>Title: ${movie.title}</li>`
-                html += `<li>Director: ${movie.director.name}</li>`
-                html += `<li>Genres: ${movie.movieGenres.map(mg => mg.genre.name)}</li>`
-                html += `<li>Actors: ${movie.movieActors.map(ma => ma.actor.name)}</li>`
+                html += `<li><strong>Title:</strong> ${movie.title}</li>`
+                html += `<li><strong>Director:</strong> ${movie.director.name}</li>`
+                html += `<li><strong>Genres:</strong> ${movie.movieGenres.map(mg => mg.genre.name).join(', ')}</li>`
+                html += `<li><strong>Actors:</strong> ${movie.movieActors.map(ma => ma.actor.name).join(', ')}</li>`
                 html += `</ul>`
-                html += `<p>${movie.description}</p>`
+                html += `<p><small>${movie.description}</small></p>`
+                html += `</div>`
               }
-              this.messages.push({
-                type: 'bot',
-                text: html
-              })
             }
 
-            // Simple object lists (director, genre, actor)
-            if (message.attachment.type == 'genre_list' || message.attachment.type == 'actor_list' || message.attachment.type == 'director_list') {
-              let html = `<ul class='list-unstyled'>`
+            // Slučaj: direktori, žanrovi, glumci
+            else if (['genre_list', 'actor_list', 'director_list'].includes(message.attachment.type)) {
+              html = `<ul class='list-unstyled'>`
               for (let obj of message.attachment.data) {
-                html += `<li>${obj.name}</li>` 
+                html += `<li>• ${obj.name}</li>`
               }
               html += `</ul>`
-              this.messages.push({
-                type: 'bot',
-                text: html
-              })
             }
 
-            // Simple list (array)
-            if (message.attachment.type == 'simple_list' ) {
-              let html = `<ul class='list-unstyled'>`
-              for (let obj of message.attachment.data) {
-                html += `<li>${obj}</li>` 
+            // Slučaj: simple_list ili create_order
+            else if (message.attachment.type == 'simple_list' || message.attachment.type == 'create_order') {
+              html = `<ul class='list-unstyled'>`
+              for (let item of message.attachment.data) {
+                html += `<li>${item}</li>`
               }
               html += `</ul>`
-              this.messages.push({
-                type: 'bot',
-                text: html
-              })
             }
 
-            // Place order
-            if (message.attachment.type == 'create_order' ) {
-              let html = `<ul class='list-unstyled'>`
-              for (let obj of message.attachment.data) {
-                html += `<li>${obj}</li>` 
-              }
-              html += `</ul>`
-              this.messages.push({
-                type: 'bot',
-                text: html
-              })
+            // Ako smo generisali HTML, šaljemo ga kao poruku
+            if (html) {
+              this.messages.push({ type: 'bot', text: html })
             }
 
-            // Make an order
+            // Slučaj: redirekcija na rezervaciju
             if (message.attachment.type == 'order_movie') {
               this.router.navigateByUrl(`/movie/${(message.attachment.data as MovieModel).shortUrl}/reservation`)
             }
           }
 
-          this.messages.push({
-            type: 'bot',
-            text: message.text
-          })
-        }
-
-        this.messages = this.messages.filter(m => {
-          if (m.type === 'bot') {
-            return m.text != this.botThinkingPlaceholder
+          // DRUGO: Ispisujemo tekstualni deo poruke (npr. "Here are some movies")
+          if (message.text) {
+            this.messages.push({ type: 'bot', text: message.text })
           }
-          return true
-        })
+        }
       })
       .catch(() => {
         this.removeBotPlaceholder()
+        this.waitingForResponse = false
         this.messages.push({
           type: 'error',
           text: 'Sorry, something went wrong! Try again later.'
         })
       })
-
-    // Primer bez Rase
-    // Lokalno u TypeScript-u
-    // if (trimmedMessage.includes('all movies')) {
-    //   await this.createBotResponseAsMovieList()
-    //   return
-    // }
-
-    // if (trimmedMessage.endsWith('movie details')) {
-    //   const query = trimmedMessage.split("movie details")[0].trim();
-    //   const movies = await MovieService.getMovies(query)
-
-    //   if (movies.data.length > 0) {
-    //     const movie = movies.data[0]
-    //     let html = `<ul class='list-unstyled'>`
-    //     html += `<li>Title: ${movie.title}</li>`
-    //     html += `<li>Director: ${movie.director.name}</li>`
-    //     html += `<li>Genres: ${movie.movieGenres.map(mg=>mg.genre.name)}</li>`
-    //     html += `<li>Actors: ${movie.movieActors.map(ma=>ma.actor.name)}</li>`
-    //     html += `</ul>`
-    //     html += `<p>${movie.description}</p>`
-
-    //     this.messages.push({
-    //       type: 'bot',
-    //       text: html
-    //     })
-    //   } else {
-    //     this.messages.push({
-    //       type: 'bot',
-    //       text: 'Sorry, i cant find the selected movie!'
-    //     })
-    //   }
-
-    //   this.removeBotPlaceholder()
-    //   return
-    // }
-
-    // const genres = await MovieService.getGenres()
-    // if (trimmedMessage.includes('genre list')) {
-    //   let html = `<ul class='list-unstyled'>`
-    //   genres.data.map(g => `<li>${g.name}</li>`)
-    //     .forEach(g => html += g)
-    //   html += `</ul>`
-
-    //   this.messages.push({
-    //     type: 'bot',
-    //     text: html
-    //   })
-    //   this.removeBotPlaceholder()
-    //   return
-    // }
-
-    // // Napravi odgovor bota bas za sve zanrove da vrati filmove  
-    // for (let genre of genres.data) {
-    //   if (trimmedMessage.includes('genre ' + genre.name.toLowerCase())) {
-    //     await this.createBotResponseAsMovieList(genre.genreId)
-    //     return
-    //   }
-    // }
-
-    // this.removeBotPlaceholder()
-    // this.messages.push({
-    //   type: 'bot',
-    //   text: 'Seams like cant help you with that!'
-    // })
-  }
-
-  async createBotResponseAsMovieList(genre: number = 0) {
-    const movies = await MovieService.getMovies('', genre)
-
-    let html = `<ul class='list-unstyled'>`
-    movies.data.map(m => `<li><a href="/movie/${m.shortUrl}">${m.title} (${m.director.name})</a></li>`)
-      .forEach(m => html += m)
-    html += `</ul>`
-
-    this.messages.push({
-      type: 'bot',
-      text: html
-    })
-    this.removeBotPlaceholder()
   }
 
   removeBotPlaceholder() {
-    this.messages = this.messages.filter(m => {
-      if (m.type === 'bot') {
-        return m.text != this.botThinkingPlaceholder
-      }
-      return true
-    })
+    this.messages = this.messages.filter(m => m.text !== this.botThinkingPlaceholder)
   }
 
   getUserName() {
     const user = UserService.getActiveUser()
-    return `${user.firstname} ${user.lastname}`
+    return user ? `${user.firstname} ${user.lastname}` : 'Guest'
   }
 
   hasAuth() {
