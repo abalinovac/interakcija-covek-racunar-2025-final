@@ -58,13 +58,76 @@ nlu:
     - please find movies by [tarantino](search_criteria)
     - movies like [avatar](search_criteria)
     - movies like [the matrix](search_criteria)
-    
+
 - regex: search_criteria
   examples: |
     - (?<=movies for ).*
     - (?<=movies by ).*
     - (?<=search for ).*
     - (?<=movies like ).*
+
+- intent: genre_list
+  examples: |
+    - list all genres
+    - what genres exist
+    - give me all genres you have
+    - what kind of movies do you have
+    - show me the movie categories
+    - which genres are available
+    - tell me the genres
+    - list categories
+    - what are the options for movie genres
+    - can I see a list of all genres
+    - show me all available genres
+    - what movie types can I choose from
+    - display all genres
+    - provide a list of genres
+    - which categories of movies are in the database
+    - let me see the genres
+    - what are the film genres
+    - what's on the genre list
+    - show me the variety of genres
+    - can you list the different genres for me
+
+- intent: actor_list
+  examples: |
+    - list all actors
+    - show me all actors
+    - who are the actors in your database
+    - can I see a list of actors
+    - give me the names of all actors
+    - show all movie stars
+    - tell me which actors you have
+    - display actor list
+    - i want to see the available actors
+    - which performers are listed
+    - list performers
+    - show me the cast database
+    - who are the available performers
+    - provide a list of all movie actors
+    - let me see all the actors
+    - what actors do you know
+    - can you show me the names of performers
+    - show me the full list of actors
+
+- intent: director_list
+  examples: |
+    - list all directors
+    - show me the directors
+    - who are the directors in your database
+    - can I see a list of movie directors
+    - give me the names of all directors
+    - who directed these movies
+    - display director list
+    - show me the available directors
+    - provide a list of filmmakers
+    - which directors are listed
+    - show me the list of all movie directors
+    - i want to see the directors available
+    - let me see all the directors
+    - what directors do you have
+    - show me the names of all filmmakers
+    - can you list the directors for me
 
 - intent: goodbye
   examples: |

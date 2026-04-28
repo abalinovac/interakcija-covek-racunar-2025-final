@@ -64,4 +64,67 @@ class ActionSearchMovies(Action):
                }
             )
         return []
+
+class ActionGenreList(Action):
+
+    def name(self) -> Text:
+        return "action_genre_list"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        url = 'https://movie.pequla.com/api/genre'       #poziva api upit žanrovi
+        rsp = requests.get(url)
+
+        dispatcher.utter_message(
+                text='Here are all the available genres: ',
+                attachment={
+                "type": "genre_list",
+                "data": rsp.json()
+               }
+            )
+        return []
+    
+class ActionActorList(Action):
+
+    def name(self) -> Text:
+        return "action_actor_list"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        url = 'https://movie.pequla.com/api/actor'       
+        rsp = requests.get(url)
+
+        dispatcher.utter_message(
+                text='Here are all actors ',
+                attachment={
+                "type": "actor_list",
+                "data": rsp.json()
+               }
+            )
+        return []
+
+class ActionDirectorList(Action):
+
+    def name(self) -> Text:
+        return "action_director_list"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        url = 'https://movie.pequla.com/api/director'       
+        rsp = requests.get(url)
+
+        dispatcher.utter_message(
+                text='Here are all directors: ',
+                attachment={
+                "type": "director_list",
+                "data": rsp.json()
+               }
+            )
+        return []
        
