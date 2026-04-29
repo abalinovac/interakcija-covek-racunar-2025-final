@@ -28,3 +28,23 @@ stories:
   - action: utter_did_that_help
   - intent: deny
   - action: utter_goodbye
+
+- story: Place an order
+  steps:
+  - intent: order_movie
+  - action: action_extract_movie
+  - slot_was_set:
+      - movie_permalink: 'brutalista'
+  - action: utter_confirm_order
+  - intent: affirm
+  - action: action_place_order
+
+- story: Deny order
+  steps:
+  - intent: order_movie
+  - action: action_extract_movie
+  - slot_was_set:
+      - movie_permalink: 'brutalista'
+  - action: utter_confirm_order
+  - intent: deny
+  - action: utter_goodbye
