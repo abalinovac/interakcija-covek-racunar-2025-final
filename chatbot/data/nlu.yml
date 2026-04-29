@@ -66,6 +66,18 @@ nlu:
     - (?<=search for ).*
     - (?<=movies like ).*
 
+- intent: order_movie
+  examples: |
+    - order movie [brutalista](order_criteria)
+    - order movie name [inception](order_criteria)
+    - order movie [the godfather](order_criteria)
+    - order movie name [interstellar](order_criteria)
+
+- regex: order_criteria
+  examples: |
+    - (?<=movie name ).*
+    - (?<=movie ).*
+
 - intent: genre_list
   examples: |
     - list all genres
