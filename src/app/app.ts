@@ -88,6 +88,11 @@ export class App {
               html += `</ul>`
             }
 
+            //Slučaj: Napravi porudžbinu
+            if(message.attachment.type = 'order_movie'){
+              this.router.navigateByUrl(`/movie/${(message.attachment.data as MovieModel).shortUrl}/reservation`)
+            }
+
             // Slučaj: simple_list ili create_order
             else if (message.attachment.type == 'simple_list' || message.attachment.type == 'create_order') {
               html = `<ul class='list-unstyled'>`

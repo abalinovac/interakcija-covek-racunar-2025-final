@@ -14,6 +14,7 @@ intents:
   - actor_list
   - director_list
   - genre_list
+  - order_movie
 
 slots:
   search_criteria:
@@ -22,9 +23,16 @@ slots:
     mappings:
       - type: from_entity
         entity: search_criteria
+  order_criteria:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: order_criteria
 
 entities:
   - search_criteria
+  - order_criteria
 
 responses:
   utter_greet:
@@ -53,6 +61,7 @@ actions:
 - action_genre_list
 - action_actor_list
 - action_director_list
+- action_order_movie
 
 session_config:
   session_expiration_time: 60
