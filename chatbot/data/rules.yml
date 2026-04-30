@@ -12,20 +12,20 @@ rules:
   - intent: bot_challenge
   - action: utter_iamabot
 
-- rule: Use action hello world
+- rule: 'Use action hello world'
   steps:
   - intent: hello_world
   - action: action_hello_world
-
-- rule: Use action latest_movies
-  steps:
-  - intent: latest_movies
-  - action: action_latest_movies
 
 - rule: 'Search movies'
   steps:
   - intent: search_movies
   - action: action_search_movies
+
+- rule: 'Recommend movies'
+  steps:
+  - intent: latest_movies
+  - action: action_latest_movies
 
 - rule: 'List genres'
   steps:
@@ -41,11 +41,3 @@ rules:
   steps:
   - intent: director_list
   - action: action_director_list
-
-- rule: 'Place an order'
-  steps:
-  - intent: order_movie
-  - action: action_order_movie
-
-
-

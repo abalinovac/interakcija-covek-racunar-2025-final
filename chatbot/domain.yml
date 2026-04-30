@@ -7,7 +7,7 @@ intents:
   - deny
   - mood_great
   - mood_unhappy
-  - bot_challenge
+  - bot_cpriceenge
   - hello_world
   - latest_movies
   - search_movies
@@ -16,13 +16,17 @@ intents:
   - genre_list
   - order_movie
   - order_cinema
-  - order_hall
+  - order_price
   - order_time
   - order_count
 
 entities:
   - search_criteria
   - order_criteria
+  - count_criteria
+  - cinema_criteria
+  - price_criteria
+  - time_criteria
 
 slots:
   search_criteria:
@@ -43,12 +47,12 @@ slots:
     mappings:
       - type: from_entity
         entity: cinema_criteria
-  hall_criteria:
+  price_criteria:
     type: text
     influence_conversation: true
     mappings:
       - type: from_entity
-        entity: hall_criteria
+        entity: price_criteria
   time_criteria:
     type: text
     influence_conversation: true
@@ -71,7 +75,7 @@ slots:
     influence_conversation: true
     mappings:
       - type: custom
-  hall_id:
+  price_id:
     type: text
     influence_conversation: true
     mappings:
@@ -123,13 +127,13 @@ actions:
   - action_director_list
   - action_extract_movie
   - action_select_cinema
-  - action_select_hall
+  - action_select_price
   - action_select_time
   - action_select_count
   - action_list_order
   - action_place_order
   - action_list_cinema
-  - action_list_hall
+  - action_list_price
   - action_list_time
 
 session_config:

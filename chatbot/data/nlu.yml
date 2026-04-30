@@ -78,6 +78,53 @@ nlu:
     - (?<=movie name ).*
     - (?<=movie ).*
 
+- intent: order_cinema
+  examples: |
+    - order in cinema [usce](cinema_criteria)
+    - order cinema [rakovica](cinema_criteria)
+    - choose cinema [rajiceva](cinema_criteria)
+    - select cinema [ada](cinema_criteria)
+
+- regex: cinema_criteria
+  examples: |
+    - (?<=in cinema ).*
+    - (?<=cinema ).*
+
+- intent: order_price
+  examples: |
+    - order price [velika](price_criteria)
+    - order price name [mala](price_criteria)
+    - choose price [privatana](price_criteria)
+    - choose price name [srednja](price_criteria)
+    - select price [velika](price_criteria)
+    - select price name [privatana](price_criteria)
+
+- regex: price_criteria
+  examples: |
+    - (?<=price name ).*
+    - (?<=price ).*
+
+- intent: order_time
+  examples: |
+    - order at [today](time_criteria)
+    - choose time [now](time_criteria)
+    - select time [tomorrow](time_criteria)
+
+- regex: time_criteria
+  examples: |
+    - (?<=at ).*
+    - (?<=time ).*
+
+- intent: order_count
+  examples: |
+    - order [1](count_criteria)
+    - take [3](count_criteria)
+
+- regex: count_criteria
+  examples: |
+    - (?<=order ).*
+    - (?<=take ).*
+
 - intent: genre_list
   examples: |
     - list all genres

@@ -1,24 +1,24 @@
-@if (movie()) {
+@if (toy()) {
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
             <a routerLink="/">Home</a>
         </li>
         <li class="breadcrumb-item">
-            <a [routerLink]="`/movie/${movie()?.shortUrl}`">{{movie()?.title}}</a>
+            <a [routerLink]="`/toy/${toy()?.toyId}`">{{toy()?.name}}</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">Reservation</li>
     </ol>
 </nav>
 <div class="row">
     <div class="col-12 col-md-4">
-        <img [src]="movie()?.poster" [alt]="movie()?.title" class="img-fluid">
+        <img [src]="toy()?.imageUrl" [alt]="toy()?.name" class="img-fluid">
     </div>
     <div class="col-12 col-md-8">
         <div class="card">
            <form [formGroup]="form" (ngSubmit)="onSubmit()">
              <div class="card-header">
-                <h5><i class="fa-solid fa-film"></i>{{movie()?.title}}</h5>
+                <h5><i class="fa-solid fa-film"></i>{{toy()?.name}}</h5>
             </div>
             <div class="card-body">
                 <div class="mb-3">
@@ -29,24 +29,7 @@
                     <option value="Petak 19h">Petak u 19h</option>
                     <option value="Petak 21h">Petak u 21h</option>
                 </select>
-                </div>
-                <div class="mb-3">
-                    <label for="cinema" class="form-label">Cinema</label>
-                    <select class="form-select" id="cinema" formControlName="cinema">
-                    <option value="Ušće">Ušće Shopping Centar</option>
-                    <option value="Rakovica">BIG Rakovica</option>
-                    <option value="Rajićeva">Rajićeva</option>
-                    <option value="Ada Mall">Ada Mall</option>
-                </select>
-                </div>
-                <div class="mb-3">
-                    <label for="hall" class="form-label">Hall</label>
-                    <select class="form-select" id="hall" formControlName="hall">
-                    <option value="Velika">Velika</option>
-                    <option value="Mala">Mala</option>
-                    <option value="Privatna">Privatna (do 12 osoba)</option>                  
-                </select>
-                </div>
+            </div>
                  <div class="mb-3">
                     <label for="quantity" class="form-label">Quantity</label>
                     <input type="number" class="form-control" id="quantity" formControlName="quantity">
@@ -54,7 +37,7 @@
             </div>
             <div class="card-footer">
                 <button class="btn btn-primary">
-                    <i class="fa-solid fa-cart-shopping"></i> Book now
+                    <i class="fa-solid fa-cart-shopping"></i> Buy now
                 </button>
             </div>
            </form>

@@ -44,9 +44,7 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col">Movie</th>
-                    <th scope="col">Cinema</th>
-                    <th scope="col">Hall</th>
+                    <th scope="col">Toy</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Time</th>
                     <th scope="col">Status</th>
@@ -56,9 +54,7 @@
             <tbody>
                 @for (order of activeUser()?.data; track $index){
                 <tr>
-                    <th scope="row">{{order.movieTitle}}</th>
-                    <td>{{order.cinema}}</td>
-                    <td>{{order.hall}}</td>
+                    <th scope="row">{{order.toyName}}</th>
                     <td>{{order.quantity}}</td>
                     <td>{{order.time}}</td>
                     <td>{{statusMap[order.status]}}</td>

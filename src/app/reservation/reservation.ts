@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { MovieModel } from '../../models/movie.model';
-import { MovieService } from '../../services/movie.service';
+import { ToyModel } from '../../models/toy.model';
+import { ToyService } from '../../services/toy.service';
 import { UserService } from '../../services/user.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Utils } from '../utils';
@@ -14,7 +14,7 @@ import { v4 as uuidv4 } from 'uuid';
   styleUrl: './reservation.css',
 })
 export class Reservation {
-  protected movie = signal<MovieModel | null>(null)
+  protected toy = signal<ToyModel | null>(null)
   protected form: FormGroup
 
   constructor(
@@ -27,12 +27,12 @@ export class Reservation {
       if (p['path']) {
         const shortUrl = p['path']
         if (!UserService.hasAuth()) {
-          localStorage.setItem(UserService.TO_KEY, `/movie/${shortUrl}/reservation`)
+          localStorage.setItem(UserService.TO_KEY, `/toy/${shortUrl}/reservation`)
           this.router.navigateByUrl('/login')
           return
         }
-        MovieService.getMovieByPermalink(shortUrl)
-          .then(rsp => this.movie.set(rsp.data))
+        ToyService.getToyByPermalink(shortUrl)
+          .then(rsp => this.toy.set(rsp.data))
       }
     })
 
@@ -50,17 +50,15 @@ export class Reservation {
       return
     }
 
-    if (!this.movie()) {
-      this.utils.showAlert('Movie hasnt been loaded yet!')
+    if (!this.toy()) {
+      this.utils.showAlert('Toy hasnt been loaded yet!')
       return
     }
 
 
     UserService.createReservation({
-      movieId: this.movie()!.movieId,
-      movieTitle: this.movie()!.title,
-      cinema: this.form.value.cinema,
-      hall: this.form.value.hall,
+      toyId: this.toy()!.toyId,
+      toyName: this.toy()!.name,
       quantity: this.form.value.quantity,
       status: 'na',
       time: this.form.value.time,

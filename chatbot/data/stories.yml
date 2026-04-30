@@ -33,8 +33,19 @@ stories:
   steps:
   - intent: order_movie
   - action: action_extract_movie
-  - slot_was_set:
-      - movie_permalink: 'brutalista'
+  - action: action_list_cinema
+  - intent: order_cinema
+  - action: action_select_cinema
+  - action: action_list_price
+  - intent: order_price
+  - action: action_select_price
+  - action: action_list_time
+  - intent: order_time
+  - action: action_select_time
+  - action: utter_choose_count
+  - intent: order_count
+  - action: action_select_count
+  - action: action_list_order
   - action: utter_confirm_order
   - intent: affirm
   - action: action_place_order
@@ -43,8 +54,6 @@ stories:
   steps:
   - intent: order_movie
   - action: action_extract_movie
-  - slot_was_set:
-      - movie_permalink: 'brutalista'
   - action: utter_confirm_order
   - intent: deny
   - action: utter_goodbye

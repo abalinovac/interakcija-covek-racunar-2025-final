@@ -5,8 +5,8 @@ import { Utils } from './utils';
 import { MessageModel } from '../models/message.model';
 import { RasaService } from '../services/rasa.service';
 import { FormsModule } from '@angular/forms';
-import { MovieService } from '../services/movie.service';
-import { MovieModel } from '../models/movie.model';
+import { ToyService } from '../services/toy.service';
+import { ToyModel } from '../models/toy.model';
 
 @Component({
   selector: 'app-root',
@@ -64,23 +64,23 @@ export class App {
           if (message.attachment != null) {
             let html = ''
 
-            // Slučaj: movie_list
-            if (message.attachment.type == 'movie_list' && Array.isArray(message.attachment.data)) {
-              for (let movie of message.attachment.data as MovieModel[]) {
+            // Slučaj: toy_list
+            if (message.attachment.type == 'toy_list' && Array.isArray(message.attachment.data)) {
+              for (let toy of message.attachment.data as ToyModel[]) {
                 html += `<div style="border-bottom: 1px solid #444; margin-bottom: 10px; padding-bottom: 5px;">`
                 html += `<ul class='list-unstyled'>`
-                html += `<li><strong>Title:</strong> ${movie.title}</li>`
-                html += `<li><strong>Director:</strong> ${movie.director.name}</li>`
-                html += `<li><strong>Genres:</strong> ${movie.movieGenres.map(mg => mg.genre.name).join(', ')}</li>`
-                html += `<li><strong>Actors:</strong> ${movie.movieActors.map(ma => ma.actor.name).join(', ')}</li>`
+                html += `<li><strong>Name:</strong> ${toy.name}</li>`
+                html += `<li><strong>Description:</strong> ${toy.description}</li>`
+                html += `<li><strong>AgeGroup:</strong> ${toy.ageGroup}</li>`
+                html += `<li><strong>Price:</strong> ${toy.price}</li>`
                 html += `</ul>`
-                html += `<p><small>${movie.description}</small></p>`
+                html += `<p><small>${toy.description}</small></p>`
                 html += `</div>`
               }
             }
 
             // Slučaj: direktori, žanrovi, glumci
-            else if (['genre_list', 'actor_list', 'director_list'].includes(message.attachment.type)) {
+            else if (['age_list', 'price_list', 'director_list'].includes(message.attachment.type)) {
               html = `<ul class='list-unstyled'>`
               for (let obj of message.attachment.data) {
                 html += `<li>• ${obj.name}</li>`
@@ -89,8 +89,8 @@ export class App {
             }
 
             //Slučaj: Napravi porudžbinu
-            if(message.attachment.type = 'order_movie'){
-              this.router.navigateByUrl(`/movie/${(message.attachment.data as MovieModel).shortUrl}/reservation`)
+            if(message.attachment.type = 'order_toy'){
+              this.router.navigateByUrl(`/toy/${(message.attachment.data as ToyModel).toyId}/reservation`)
             }
 
             // Slučaj: simple_list ili create_order
@@ -108,12 +108,12 @@ export class App {
             }
 
             // Slučaj: redirekcija na rezervaciju
-            if (message.attachment.type == 'order_movie') {
-              this.router.navigateByUrl(`/movie/${(message.attachment.data as MovieModel).shortUrl}/reservation`)
+            if (message.attachment.type == 'order_toy') {
+              this.router.navigateByUrl(`/toy/${(message.attachment.data as ToyModel).toyId}/reservation`)
             }
           }
 
-          // DRUGO: Ispisujemo tekstualni deo poruke (npr. "Here are some movies")
+          // DRUGO: Ispisujemo tekstualni deo poruke (npr. "Here are some toys")
           if (message.text) {
             this.messages.push({ type: 'bot', text: message.text })
           }

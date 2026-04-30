@@ -1,10 +1,8 @@
 export interface OrderModel{
     orderId: string,
-    movieId: number,
-    movieTitle: string,
+    toyId: number,
+    toyName: string,
     time: string,
-    cinema: string,
-    hall: string,
     quantity: number,
     status: 'na' | 'paid' | 'canceled' | 'liked' | 'disliked'
 }

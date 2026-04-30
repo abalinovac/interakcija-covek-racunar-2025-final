@@ -177,17 +177,17 @@ class ActionListCinema(Action):
             )
         return []
     
-class ActionListHall(Action):
+class ActionListPrice(Action):
 
     def name(self) -> Text:
-        return "action_list_hall"
+        return "action_list_price"
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
        
         dispatcher.utter_message(
-                text='Here are all the available halls:',
+                text='Here are all prices:',
                 attachment={
                 "type": "simple_list",
                 "data": ['Velika', 'Mala', 'Privatna']
@@ -241,32 +241,32 @@ class ActionSelectCinema(Action):
         dispatcher.utter_message(text='No cinema for that criteria found!') 
         return []
     
-class ActionSelectHall(Action):
+class ActionSelectPrice(Action):
 
     def name(self) -> Text:
-        return "action_select_hall"
+        return "action_select_price"
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        criteria = tracker.get_slot("hall_criteria")
-        halls = ['Velika', 'Mala', 'Privatna']
+        criteria = tracker.get_slot("price_criteria")
+        prices = ['Velika', 'Mala', 'Privatna']
         matched = []
 
         if criteria:
             normalized_criteria = normalize(criteria)
 
-            for hall in halls:
-                if normalize(hall) == normalized_criteria:
-                    matched.append(hall)
+            for price in prices:
+                if normalize(price) == normalized_criteria:
+                    matched.append(price)
 
         if len(matched) > 0:
-            exact_hall = matched[0]
-            dispatcher.utter_message(text='Selected hall: '+ exact_hall)
-            return [SlotSet('hall_id',exact_hall)]
+            exact_price = matched[0]
+            dispatcher.utter_message(text='Selected price: '+ exact_price)
+            return [SlotSet('price_id',exact_price)]
         
-        dispatcher.utter_message(text='No hall for that criteria found!') 
+        dispatcher.utter_message(text='No prices for that criteria found!') 
         return []
     
 class ActionSelectTime(Action):
@@ -322,7 +322,7 @@ class ActionListOrder(Action):
         order_list= [
             'Movie: ' +  tracker.get_slot("movie_permalink"),
             'Cienema: ' +  tracker.get_slot("cinema_id"),
-            'Hall: ' +  tracker.get_slot("hall_id"),
+            'Price: ' +  tracker.get_slot("price_id"),
             'Time: ' +  tracker.get_slot("time_id"),
             'Count: ' +  tracker.get_slot("ticket_count"),
         ]
@@ -348,7 +348,7 @@ class ActionPlaceOrder(Action):
         order_details= {
             "movie": tracker.get_slot("movie_permalink"),
             "cinema": tracker.get_slot("cinema_id"),
-            "hall":  tracker.get_slot("hall_id"),
+            "Price":  tracker.get_slot("price_id"),
             "time": tracker.get_slot("time_id"),
             "count": tracker.get_slot("ticket_count")
         }

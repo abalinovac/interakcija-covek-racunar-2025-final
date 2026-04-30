@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
-import { MovieService } from '../../services/movie.service';
-import { MovieModel } from '../../models/movie.model';
+import { ToyService } from '../../services/toy.service';
+import { ToyModel } from '../../models/toy.model';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from "@angular/forms";
 
@@ -11,21 +11,21 @@ import { FormsModule } from "@angular/forms";
   styleUrl: './home.css'
 })
 export class Home {
-  protected movies = signal<MovieModel[]>([])
+  protected toys = signal<ToyModel[]>([])
   protected previousSearch = 'N/A'
   protected search = ''
 
   constructor() {
-    this.loadMovies()
+    this.loadToys()
   }
 
-  protected loadMovies() {
+  protected loadToys() {
     if (this.previousSearch == '' && this.search == '')
       return
 
     this.previousSearch = this.search
-    MovieService.getMovies(this.search)
-      .then(rsp => this.movies.set(rsp.data))
+    ToyService.getToys(this.search)
+      .then(rsp => this.toys.set(rsp.data))
   }
 }
  
