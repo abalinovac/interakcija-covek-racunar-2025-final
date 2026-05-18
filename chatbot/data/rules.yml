@@ -22,10 +22,10 @@ rules:
   - intent: search_movies
   - action: action_search_movies
 
-- rule: 'Recommend movies'
+- rule: 'Recommend toy'
   steps:
-  - intent: latest_movies
-  - action: action_latest_movies
+  - intent: latest_toys
+  - action: action_latest_toys
 
 - rule: 'List genres'
   steps:

@@ -120,7 +120,7 @@ responses:
 
 actions:
   - action_hello_world
-  - action_latest_movies
+  - action_latest_toys
   - action_search_movies
   - action_genre_list
   - action_actor_list

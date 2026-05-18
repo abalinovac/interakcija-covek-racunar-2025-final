@@ -21,33 +21,28 @@ nlu:
   examples: |
     - hello world  
 
-- intent: latest_movies
+- intent: latest_toys
   examples: |
-    - recommend me some movie 
-    - give me some movie
-    - can you recommend me 
-    - any chance you got some movies for me
+    - what are the latest toy releases
+    - show me the newest arrivals
+    - what is popular right now for kids
+    - any new toys in the shop
+    - what are the trending toys this season
+    - anything fresh in the toy aisle
+    - can you recommend the latest hits
+    - whats the best-selling toy at the moment
+    - show me the must-haves for this year
     - anything new in the offer
-    - anything fresh
-    - can you give me some fresh movies
-    - your recommendations
-    - what is popular right now
-    - show me the newest releases
-    - what are the latest hits in cinema
-    - what should I watch tonight
-    - give me a list of recent films
-    - any new blockbusters out lately
-    - tell me what's trending in movies
-    - suggest some new titles
-    - what's playing in theaters currently
-    - are there any fresh movies to see
-    - i want to see the latest movie trailers
-    - suggest a movie that just came out
-    - what are the top picks for this week
-    - what's the newest stuff you've got
-    - i'm looking for something new to watch
-    - any new arrivals in the movie category
-    - give me some fresh cinematic suggestions
+    - what's hot right now in toys
+    - any chance you got some new stuff for me
+    - show me the newest releases in the store
+    - what are the latest drops
+    - give me some fresh toys
+    - your recommendations for new toys
+    - whats the newest thing you have
+    - are there any new collectibles available
+    - show me the latest hits for children
+    - what is trending on the toy market
 
 - intent: search_movies
   examples: |
