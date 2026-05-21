@@ -44,34 +44,34 @@ nlu:
     - show me the latest hits for children
     - what is trending on the toy market
 
-- intent: search_movies
+- intent: search_toys
   examples: |
-    - search movies for [brutalista](search_criteria)
-    - search movies for [inception](search_criteria)
-    - search movies for [the godfather](search_criteria)
-    - search movies for [interstellar](search_criteria)
-    - please find movies by [tarantino](search_criteria)
-    - movies like [avatar](search_criteria)
-    - movies like [the matrix](search_criteria)
+    - search toys for [Drvena slagalica životinje](search_criteria)
+    - search toys for [Mala slikovnica boje](search_criteria)
+    - search toys for [Superheroj figura](search_criteria)
+    - search toys for [Set za crtanje](search_criteria)
+    - please find toys by [Vatrogasni kamion](search_criteria)
+    - toys like [Plišana panda](search_criteria)
+    - toys like [Monopol Junior](search_criteria)
 
 - regex: search_criteria
   examples: |
-    - (?<=movies for ).*
-    - (?<=movies by ).*
+    - (?<=toys for ).*
+    - (?<=toys by ).*
     - (?<=search for ).*
-    - (?<=movies like ).*
+    - (?<=toys like ).*
 
-- intent: order_movie
+- intent: order_toy
   examples: |
-    - order movie [brutalista](order_criteria)
-    - order movie name [inception](order_criteria)
-    - order movie [the godfather](order_criteria)
-    - order movie name [interstellar](order_criteria)
+    - order toy [Drvena slagalica životinje](order_criteria)
+    - order toy name [Mala slikovnica boje](order_criteria)
+    - order toy [Superheroj figura](order_criteria)
+    - order toy name [Set za crtanje](order_criteria)
 
 - regex: order_criteria
   examples: |
-    - (?<=movie name ).*
-    - (?<=movie ).*
+    - (?<=toy name ).*
+    - (?<=toy ).*
 
 - intent: order_cinema
   examples: |
@@ -120,63 +120,65 @@ nlu:
     - (?<=order ).*
     - (?<=take ).*
 
-- intent: genre_list
+- intent: age_list
   examples: |
-    - list all genres
-    - what genres exist
-    - give me all genres you have
-    - what kind of movies do you have
-    - show me the movie categories
-    - which genres are available
-    - tell me the genres
-    - list categories
-    - what are the options for movie genres
-    - can I see a list of all genres
-    - show me all available genres
-    - what movie types can I choose from
-    - display all genres
-    - provide a list of genres
-    - which categories of movies are in the database
-    - let me see the genres
-    - what are the film genres
-    - what's on the genre list
-    - show me the variety of genres
-    - can you list the different genres for me
+    - what age groups do you have
+    - list all age categories
+    - show me the toy age ranges
+    - what ages are available
+    - give me all toy age groups
+    - what age options can I choose from
+    - show all available ages
+    - which age categories exist
+    - what age ranges do your toys support
+    - display all toy age groups
+    - can I see the available age ranges
+    - what are the toy age categories
+    - tell me the available age groups
+    - list toy ages
+    - what kind of age groups are in the database
+    - which ages are supported
+    - provide a list of toy age ranges
+    - what are the options for toy ages
+    - show me all age categories
+    - can you list the different toy age groups for me
+    
 
-- intent: actor_list
+- intent: type_list
   examples: |
-    - list all actors
-    - show me all actors
-    - who are the actors in your database
-    - can I see a list of actors
-    - give me the names of all actors
-    - show all movie stars
-    - tell me which actors you have
-    - display actor list
-    - i want to see the available actors
-    - which performers are listed
-    - list performers
-    - show me the cast database
-    - who are the available performers
-    - provide a list of all movie actors
-    - let me see all the actors
-    - what actors do you know
-    - can you show me the names of performers
-    - show me the full list of actors
+    - list all toy types
+    - show me all toy categories
+    - what toy types do you have
+    - can I see the available toy types
+    - give me all toy categories
+    - display toy type list
+    - which toy types are available
+    - tell me the available toy types
+    - list all categories of toys
+    - what kinds of toys exist
+    - show me the toy genres
+    - what toy categories can I choose from
+    - provide a list of toy types
+    - let me see all toy types
+    - what types of toys are in the database
+    - can you list the different toy categories for me
+    - show me all available toy types
+    - what are the options for toy types
+    - display all toy categories
 
 - intent: director_list
   examples: |
     - list all directors
     - show me the directors
     - who are the directors in your database
-    - can I see a list of movie directors
+    - can I see a list of toy directors
     - give me the names of all directors
-    - who directed these movies
+    - who directed these toys
     - display director list
     - show me the available directors
     - provide a list of filmmakers
     - which directors are listed
-    - show me the list of all movie directors
+    - show me the list of all toy directors
     - i want to see the directors available
     - let me see all the directors
     - what directors do you have

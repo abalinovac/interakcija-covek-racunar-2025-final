@@ -17,25 +17,25 @@ rules:
   - intent: hello_world
   - action: action_hello_world
 
-- rule: 'Search movies'
+- rule: 'Search toys'
   steps:
-  - intent: search_movies
-  - action: action_search_movies
+  - intent: search_toys
+  - action: action_search_toys
 
 - rule: 'Recommend toy'
   steps:
   - intent: latest_toys
   - action: action_latest_toys
 
-- rule: 'List genres'
+- rule: 'List ages'
   steps:
-  - intent: genre_list
-  - action: action_genre_list
+  - intent: age_list
+  - action: action_age_list
 
-- rule: 'List actors'
+- rule: 'List type group'
   steps:
-  - intent: actor_list
-  - action: action_actor_list
+  - intent: type_list
+  - action: action_type_list
 
 - rule: 'List directors'
   steps:

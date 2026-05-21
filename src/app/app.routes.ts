@@ -6,8 +6,6 @@ import { Toy } from './toy/toy';
 import { Profile } from './profile/profile';
 import { Reservation } from './reservation/reservation';
 
- 
-
 export const routes: Routes = [
     {path: '', component: Home, title: 'Home' },
     {path: 'about', component: About, title: 'About'},

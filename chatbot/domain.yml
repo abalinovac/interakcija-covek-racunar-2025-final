@@ -9,12 +9,12 @@ intents:
   - mood_unhappy
   - bot_cpriceenge
   - hello_world
-  - latest_movies
-  - search_movies
-  - actor_list
+  - latest_toys
+  - search_toys
+  - type_list
   - director_list
-  - genre_list
-  - order_movie
+  - age_list
+  - order_toy
   - order_cinema
   - order_price
   - order_time
@@ -65,7 +65,7 @@ slots:
     mappings:
       - type: from_entity
         entity: count_criteria
-  movie_permalink:
+  toy_permalink:
     type: text
     influence_conversation: true
     mappings:
@@ -121,11 +121,11 @@ responses:
 actions:
   - action_hello_world
   - action_latest_toys
-  - action_search_movies
-  - action_genre_list
-  - action_actor_list
+  - action_search_toys
+  - action_age_list
+  - action_type_list
   - action_director_list
-  - action_extract_movie
+  - action_extract_toy
   - action_select_cinema
   - action_select_price
   - action_select_time

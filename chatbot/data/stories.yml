@@ -31,8 +31,8 @@ stories:
 
 - story: Place an order
   steps:
-  - intent: order_movie
-  - action: action_extract_movie
+  - intent: order_toy
+  - action: action_extract_toy
   - action: action_list_cinema
   - intent: order_cinema
   - action: action_select_cinema
@@ -52,8 +52,8 @@ stories:
 
 - story: Deny order
   steps:
-  - intent: order_movie
-  - action: action_extract_movie
+  - intent: order_toy
+  - action: action_extract_toy
   - action: utter_confirm_order
   - intent: deny
   - action: utter_goodbye

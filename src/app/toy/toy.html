@@ -1,47 +1,48 @@
 @if (toy()) {
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-            <a routerLink="/">Home</a>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">{{toy()?.name}}</li>
-    </ol>
-</nav>
-<div class="row">
-    <div class="col-12 col-md-4">
-        <img [src]="toy()?.imageUrl" [alt]="toy()?.name" class="img-fluid">
-    </div>
-    <div class="col-12 col-md-8">
-        <div class="card">
-            <div class="card-header">
-                <h5><i class="fa-solid fa-film"></i>{{toy()?.name}}</h5>
-            </div>
-            <div class="card-body">
-                <p [innerHTML]="toy()?.description"></p>
-                <div class="row">
-
-                    <div class="col-12 col-md-6">
-                        <h6>Price:</h6>
-                        <ul>
-                            <li>{{ toy()?.price }} RSD</li>
-                        </ul>
-                    </div>
-
-                    <div class="col-12 col-md-6">
-                        <h6>Age Group:</h6>
-                        <ul>
-                            <li>{{ toy()?.ageGroup?.name }}+ years</li>
-                        </ul>
-                    </div>
-
+} @else {
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a routerLink="/">Home</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">{{toy()?.name}}</li>
+        </ol>
+    </nav>
+    <div class="row">
+        <div class="col-12 col-md-4">
+            <img [src]="toy()?.imageUrl" [alt]="toy()?.name" class="img-fluid">
+        </div>
+        <div class="col-12 col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fa-solid fa-film"></i>{{toy()?.name}}</h5>
                 </div>
-            </div>
-            <div class="card-footer">
-                <a class="btn btn-success" [routerLink]="`/toy/${toy()?.toyId}/reservation`">
-                    <i class="fa-solid fa-cart-shopping"></i> Add to Cart
-                </a>
+                <div class="card-body">
+                    <p [innerHTML]="toy()?.description"></p>
+                    <div class="row">
+                    
+                        <div class="col-12 col-md-6">
+                            <h6>Price:</h6>
+                            <ul>
+                                <li>{{ toy()?.price }} RSD</li>
+                            </ul>
+                        </div>
+                    
+                        <div class="col-12 col-md-6">
+                            <h6>Age Group:</h6>
+                            <ul>
+                                <li>{{ toy()?.ageGroup?.name }}+ years</li>
+                            </ul>
+                        </div>
+                    
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a class="btn btn-success" [routerLink]="`/toy/${toy()?.toyId}/reservation`">
+                        <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-</div>
 }

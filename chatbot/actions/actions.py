@@ -26,33 +26,33 @@ class ActionHelloWorld(Action):
         dispatcher.utter_message(text="Hello World from Actions!")
         return []
     
-class ActionLatestMovies(Action):
+class ActionLatestToys(Action):
 
     def name(self) -> Text:
-        return "action_latest_movies"
+        return "action_latest_toys"
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        url = 'https://movie.pequla.com/api/movie'
+        url = 'https://toy.pequla.com/api/toy'
         rsp = requests.get(url)
-        movies = rsp.json()
+        toys = rsp.json()
 
-        if len(movies) >= 3:
+        if len(toys) >= 3:
             bot_response = {
-                "type": "movie_list",
-                "data": movies[-3:]
+                "type": "toy_list",
+                "data": toys[-3:]
             }
-            dispatcher.utter_message(text='Here are some movies', attachment=bot_response)
+            dispatcher.utter_message(text='Here are some toys', attachment=bot_response)
         else:
-            dispatcher.utter_message(text='Not enought movies found') 
+            dispatcher.utter_message(text='Not enought toys found') 
         return []
     
-class ActionSearchMovies(Action):
+class ActionSearchToys(Action):
 
     def name(self) -> Text:
-        return "action_search_movies"
+        return "action_search_toys"
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
@@ -60,56 +60,56 @@ class ActionSearchMovies(Action):
 
         criteria=tracker.get_slot("search_criteria")
 
-        url = 'https://movie.pequla.com/api/movie?search=' + criteria
+        url = 'https://toy.pequla.com/api/toy?search=' + criteria
         rsp = requests.get(url)
-        movies = rsp.json()
+        toys = rsp.json()
 
         dispatcher.utter_message(
                 text='Here are the search results for ' + criteria,
                 attachment={
-                "type": "movie_list",
-                "data": movies
+                "type": "toy_list",
+                "data": toys
                }
             )
         return []
     
-class ActionGenreList(Action):
+class ActionAgeList(Action):
 
     def name(self) -> Text:
-        return "action_genre_list"
+        return "action_age_list"
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        url = 'https://movie.pequla.com/api/genre'
+        url = 'https://toy.pequla.com/api/age-group'
         rsp = requests.get(url)
 
         dispatcher.utter_message(
-                text='Here are all the available genres:',
+                text='Here are all age groups:',
                 attachment={
-                "type": "genre_list",
+                "type": "age_list",
                 "data": rsp.json()
                }
             )
         return []
 
-class ActionActorList(Action):
+class ActionTypeList(Action):
 
     def name(self) -> Text:
-        return "action_actor_list"
+        return "action_type_list"
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        url = 'https://movie.pequla.com/api/actor'
+        url = 'https://toy.pequla.com/api/type'
         rsp = requests.get(url)
 
         dispatcher.utter_message(
-                text='Here are all the available actors:',
+                text='Here are all types of toys:',
                 attachment={
-                "type": "actor_list",
+                "type": "type_list",
                 "data": rsp.json()
                }
             )
@@ -136,10 +136,10 @@ class ActionDirectorList(Action):
             )
         return []
 
-class ActionExtractMovie(Action):
+class ActionExtractToy(Action):
 
     def name(self) -> Text:
-        return "action_extract_movie"
+        return "action_extract_toy"
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
@@ -147,16 +147,16 @@ class ActionExtractMovie(Action):
 
         criteria=tracker.get_slot("order_criteria")
 
-        url = 'https://movie.pequla.com/api/movie?search=' + criteria
+        url = 'https://toy.pequla.com/api/toy?search=' + criteria
         rsp = requests.get(url)
-        movies = rsp.json()
+        toys = rsp.json()
 
-        if len(movies) > 0:
-            exact_movie = movies[0]
-            dispatcher.utter_message(text='Selected movie: '+ exact_movie['title'])
-            return [SlotSet('movie_permalink',exact_movie['shortUrl'])]
+        if len(toys) > 0:
+            exact_toy = toys[0]
+            dispatcher.utter_message(text='Selected toy: '+ exact_toy['title'])
+            return [SlotSet('toy_permalink',exact_toy['shortUrl'])]
         
-        dispatcher.utter_message(text='No movie for that criteria found!') 
+        dispatcher.utter_message(text='No toy for that criteria found!') 
         return []
     
 class ActionListCinema(Action):
@@ -212,7 +212,7 @@ class ActionListTime(Action):
                }
             )
         return []
-    
+   
 class ActionSelectCinema(Action):
 
     def name(self) -> Text:
