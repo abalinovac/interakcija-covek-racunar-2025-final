@@ -12,7 +12,7 @@
 </nav>
 <div class="row">
     <div class="col-12 col-md-4">
-        <img [src]="toy()?.imageUrl" [alt]="toy()?.name" class="img-fluid">
+        <img [src]="'https://toy.pequla.com' + toy()?.imageUrl" [alt]="toy()?.name" class="img-fluid">
     </div>
     <div class="col-12 col-md-8">
         <div class="card">
@@ -22,12 +22,11 @@
             </div>
             <div class="card-body">
                 <div class="mb-3">
-                    <label for="time" class="form-label">Time</label>
-                    <select class="form-select" id="time" formControlName="time">
-                    <option value="Utorak 22h">Utorak u 22h</option>
-                    <option value="Sreda 20h">Sreda u 20h</option>
-                    <option value="Petak 19h">Petak u 19h</option>
-                    <option value="Petak 21h">Petak u 21h</option>
+                    <label for="delivery" class="form-label">Delivery method:</label>
+                    <select class="form-select" id="delivery" formControlName="delivery">
+                    <option value="Kurirska služba">Dostava na kućnu adresu (Kurirska služba)</option>
+                    <option value="Preuzimanje u prodavnici (Beograd)">Preuzimanje u prodavnici (Beograd)</option>
+                    <option value="Preuzimanje u prodavnici (Novi Sad)">Preuzimanje u prodavnici (Novi Sad)</option>
                 </select>
             </div>
                  <div class="mb-3">

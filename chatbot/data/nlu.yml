@@ -73,42 +73,31 @@ nlu:
     - (?<=toy name ).*
     - (?<=toy ).*
 
-- intent: order_cinema
+- intent: order_deliveryMethod
   examples: |
-    - order in cinema [usce](cinema_criteria)
-    - order cinema [rakovica](cinema_criteria)
-    - choose cinema [rajiceva](cinema_criteria)
-    - select cinema [ada](cinema_criteria)
+    - order in deliver [Kurirska služba](delivery_criteria)
+    - order deliver [Preuzimanje u prodavnici (Beograd)](delivery_criteria)
+    - choose deliver [Preuzimanje u prodavnici (Novi Sad)](delivery_criteria)
 
-- regex: cinema_criteria
+- regex: delivery_criteria
   examples: |
-    - (?<=in cinema ).*
-    - (?<=cinema ).*
-
-- intent: order_price
-  examples: |
-    - order price [velika](price_criteria)
-    - order price name [mala](price_criteria)
-    - choose price [privatana](price_criteria)
-    - choose price name [srednja](price_criteria)
-    - select price [velika](price_criteria)
-    - select price name [privatana](price_criteria)
-
-- regex: price_criteria
-  examples: |
-    - (?<=price name ).*
-    - (?<=price ).*
-
-- intent: order_time
-  examples: |
-    - order at [today](time_criteria)
-    - choose time [now](time_criteria)
-    - select time [tomorrow](time_criteria)
-
-- regex: time_criteria
-  examples: |
+    - (?<=in deliver ).*
+    - (?<=deliver ).*
     - (?<=at ).*
-    - (?<=time ).*
+
+#- intent: order_price
+#  examples: |
+#    - order price [velika](price_criteria)
+#    - order price name [mala](price_criteria)
+#    - choose price [privatana](price_criteria)
+#    - choose price name [srednja](price_criteria)
+#    - select price [velika](price_criteria)
+#    - select price name [privatana](price_criteria)
+
+#- regex: price_criteria
+#  examples: |
+#    - (?<=price name ).*
+#    - (?<=price ).*
 
 - intent: order_count
   examples: |
@@ -166,24 +155,6 @@ nlu:
     - what are the options for toy types
     - display all toy categories
 
-- intent: director_list
-  examples: |
-    - list all directors
-    - show me the directors
-    - who are the directors in your database
-    - can I see a list of toy directors
-    - give me the names of all directors
-    - who directed these toys
-    - display director list
-    - show me the available directors
-    - provide a list of filmmakers
-    - which directors are listed
-    - show me the list of all toy directors
-    - i want to see the directors available
-    - let me see all the directors
-    - what directors do you have
-    - show me the names of all filmmakers
-    - can you list the directors for me
 
 - intent: goodbye
   examples: |

@@ -17,13 +17,13 @@ export class ToyService{
         method: 'get',
         params: {
             'search': search,
-            'age': this.name       //PROVERITI
+            'age': age
         }
        })
     }
 
     static async getToyByPermalink(permalink: string){
-        return client.get<ToyModel>(`/toy/short/${permalink}`)
+        return client.get<ToyModel>(`/toy/permalink/${permalink}`)
     }
 
     static async getAgeGroup(){

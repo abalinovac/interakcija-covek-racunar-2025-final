@@ -37,9 +37,7 @@ export class Reservation {
     })
 
     this.form = this.builder.group({
-      time: ['Petak 19h', Validators.required],
-      cinema: ['Ada Mall', Validators.required],
-      hall: ['Velika', Validators.required],
+      delivery: ['Kurirska služba', Validators.required],
       quantity: ['1', Validators.required]
     })
   }
@@ -61,7 +59,7 @@ export class Reservation {
       toyName: this.toy()!.name,
       quantity: this.form.value.quantity,
       status: 'na',
-      time: this.form.value.time,
+      delivery: this.form.value.delivery,
       orderId: uuidv4()
     })
 

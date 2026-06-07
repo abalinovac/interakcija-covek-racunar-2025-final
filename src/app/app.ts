@@ -5,8 +5,9 @@ import { Utils } from './utils';
 import { MessageModel } from '../models/message.model';
 import { RasaService } from '../services/rasa.service';
 import { FormsModule } from '@angular/forms';
-import { ToyService } from '../services/toy.service';
 import { ToyModel } from '../models/toy.model';
+import { AxiosResponse } from 'axios';
+import { ToyService } from '../services/toy.service';
 
 @Component({
   selector: 'app-root',
@@ -34,23 +35,22 @@ export class App {
   }
 
   async sendUserMessage() {
-    if (this.waitingForResponse || !this.userMessage.trim()) return
+    if (this.waitingForResponse) return
 
     const trimmedMessage = this.userMessage.trim()
     this.userMessage = ''
-    this.waitingForResponse = true
 
-    // 1. Dodajemo korisničku poruku
-    this.messages.push({ type: 'user', text: trimmedMessage })
-    
-    // 2. Dodajemo placeholder dok bot "razmišlja"
-    this.messages.push({ type: 'bot', text: this.botThinkingPlaceholder })
+    this.messages.push({
+      type: 'user',
+      text: trimmedMessage
+    })
+    this.messages.push({
+      type: 'bot',
+      text: this.botThinkingPlaceholder
+    })
 
     RasaService.sendMessage(trimmedMessage)
       .then(rsp => {
-        this.removeBotPlaceholder()
-        this.waitingForResponse = false
-
         if (rsp.data.length == 0) {
           this.messages.push({
             type: 'bot',
@@ -60,82 +60,183 @@ export class App {
         }
 
         for (let message of rsp.data) {
-          // PRVO: Provera attachment-a (ako postoji)
           if (message.attachment != null) {
-            let html = ''
-
-            // Slučaj: toy_list
+            // Returns toy list
             if (message.attachment.type == 'toy_list' && Array.isArray(message.attachment.data)) {
+              let html = ''
               for (let toy of message.attachment.data as ToyModel[]) {
-                html += `<div style="border-bottom: 1px solid #444; margin-bottom: 10px; padding-bottom: 5px;">`
                 html += `<ul class='list-unstyled'>`
-                html += `<li><strong>Name:</strong> ${toy.name}</li>`
-                html += `<li><strong>Description:</strong> ${toy.description}</li>`
-                html += `<li><strong>AgeGroup:</strong> ${toy.ageGroup}</li>`
-                html += `<li><strong>Price:</strong> ${toy.price}</li>`
+                html += `<li>Name: ${toy.name}</li>`
+                html += `<li>Description: ${toy.description}</li>`
+                html += `<li>Target group: ${toy.targetGroup}</li>`
+                html += `<li>Price: ${toy.price}</li>`
                 html += `</ul>`
-                html += `<p><small>${toy.description}</small></p>`
-                html += `</div>`
               }
+              this.messages.push({
+                type: 'bot',
+                text: html
+              })
             }
 
-            // Slučaj: direktori, žanrovi, glumci
-            else if (['age_list', 'price_list', 'director_list'].includes(message.attachment.type)) {
-              html = `<ul class='list-unstyled'>`
+            // Simple object lists (age, type)
+            if (message.attachment.type == 'age_list' || message.attachment.type == 'type_list') {
+              let html = `<ul class='list-unstyled'>`
               for (let obj of message.attachment.data) {
-                html += `<li>• ${obj.name}</li>`
+                html += `<li>${obj.name}</li>`
               }
               html += `</ul>`
+              this.messages.push({
+                type: 'bot',
+                text: html
+              })
             }
 
-            //Slučaj: Napravi porudžbinu
-            if(message.attachment.type = 'order_toy'){
-              this.router.navigateByUrl(`/toy/${(message.attachment.data as ToyModel).toyId}/reservation`)
-            }
-
-            // Slučaj: simple_list ili create_order
-            else if (message.attachment.type == 'simple_list' || message.attachment.type == 'create_order') {
-              html = `<ul class='list-unstyled'>`
-              for (let item of message.attachment.data) {
-                html += `<li>${item}</li>`
+            // Simple list (array)
+            if (message.attachment.type == 'simple_list') {
+              let html = `<ul class='list-unstyled'>`
+              for (let obj of message.attachment.data) {
+                html += `<li>${obj}</li>`
               }
               html += `</ul>`
+              this.messages.push({
+                type: 'bot',
+                text: html
+              })
             }
 
-            // Ako smo generisali HTML, šaljemo ga kao poruku
-            if (html) {
-              this.messages.push({ type: 'bot', text: html })
+            // Place order
+            if (message.attachment.type == 'create_order') {
+              let html = `<ul class='list-unstyled'>`
+              for (let obj of message.attachment.data) {
+                html += `<li>${obj}</li>`
+              }
+              html += `</ul>`
+              this.messages.push({
+                type: 'bot',
+                text: html
+              })
             }
 
-            // Slučaj: redirekcija na rezervaciju
+            // Make an order
             if (message.attachment.type == 'order_toy') {
-              this.router.navigateByUrl(`/toy/${(message.attachment.data as ToyModel).toyId}/reservation`)
+              this.router.navigateByUrl(`/toy/${(message.attachment.data as ToyModel).permalink}/reservation`)
             }
           }
 
-          // DRUGO: Ispisujemo tekstualni deo poruke (npr. "Here are some toys")
-          if (message.text) {
-            this.messages.push({ type: 'bot', text: message.text })
-          }
+          this.messages.push({
+            type: 'bot',
+            text: message.text
+          })
         }
+
+        this.messages = this.messages.filter(m => {
+          if (m.type === 'bot') {
+            return m.text != this.botThinkingPlaceholder
+          }
+          return true
+        })
       })
       .catch(() => {
         this.removeBotPlaceholder()
-        this.waitingForResponse = false
         this.messages.push({
           type: 'error',
           text: 'Sorry, something went wrong! Try again later.'
         })
       })
+
+    // Primer bez Rase
+    // Lokalno u TypeScript-u
+    // if (trimmedMessage.includes('all movies')) {
+    //   await this.createBotResponseAsMovieList()
+    //   return
+    // }
+
+    // if (trimmedMessage.endsWith('movie details')) {
+    //   const query = trimmedMessage.split("movie details")[0].trim();
+    //   const movies = await MovieService.getMovies(query)
+
+    //   if (movies.data.length > 0) {
+    //     const movie = movies.data[0]
+    //     let html = `<ul class='list-unstyled'>`
+    //     html += `<li>Title: ${movie.title}</li>`
+    //     html += `<li>Director: ${movie.director.name}</li>`
+    //     html += `<li>Genres: ${movie.movieGenres.map(mg=>mg.genre.name)}</li>`
+    //     html += `<li>Actors: ${movie.movieActors.map(ma=>ma.actor.name)}</li>`
+    //     html += `</ul>`
+    //     html += `<p>${movie.description}</p>`
+
+    //     this.messages.push({
+    //       type: 'bot',
+    //       text: html
+    //     })
+    //   } else {
+    //     this.messages.push({
+    //       type: 'bot',
+    //       text: 'Sorry, i cant find the selected movie!'
+    //     })
+    //   }
+
+    //   this.removeBotPlaceholder()
+    //   return
+    // }
+
+    // const genres = await MovieService.getGenres()
+    // if (trimmedMessage.includes('genre list')) {
+    //   let html = `<ul class='list-unstyled'>`
+    //   genres.data.map(g => `<li>${g.name}</li>`)
+    //     .forEach(g => html += g)
+    //   html += `</ul>`
+
+    //   this.messages.push({
+    //     type: 'bot',
+    //     text: html
+    //   })
+    //   this.removeBotPlaceholder()
+    //   return
+    // }
+
+    // // Napravi odgovor bota bas za sve zanrove da vrati filmove  
+    // for (let genre of genres.data) {
+    //   if (trimmedMessage.includes('genre ' + genre.name.toLowerCase())) {
+    //     await this.createBotResponseAsMovieList(genre.genreId)
+    //     return
+    //   }
+    // }
+
+    // this.removeBotPlaceholder()
+    // this.messages.push({
+    //   type: 'bot',
+    //   text: 'Seams like cant help you with that!'
+    // })
+  }
+
+  async createBotResponseAsToyList(genre: number = 0) {
+    const toys = await ToyService.getToys('', genre)
+
+    let html = `<ul class='list-unstyled'>`
+    toys.data.map(m => `<li><a href="/toy/${m.name}">${m.description} (${m.price})</a></li>`)
+      .forEach(m => html += m)
+    html += `</ul>`
+
+    this.messages.push({
+      type: 'bot',
+      text: html
+    })
+    this.removeBotPlaceholder()
   }
 
   removeBotPlaceholder() {
-    this.messages = this.messages.filter(m => m.text !== this.botThinkingPlaceholder)
+    this.messages = this.messages.filter(m => {
+      if (m.type === 'bot') {
+        return m.text != this.botThinkingPlaceholder
+      }
+      return true
+    })
   }
 
   getUserName() {
     const user = UserService.getActiveUser()
-    return user ? `${user.firstname} ${user.lastname}` : 'Guest'
+    return `${user.firstname} ${user.lastname}`
   }
 
   hasAuth() {

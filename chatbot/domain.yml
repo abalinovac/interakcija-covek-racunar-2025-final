@@ -7,26 +7,22 @@ intents:
   - deny
   - mood_great
   - mood_unhappy
-  - bot_cpriceenge
+  - bot_challenge
   - hello_world
   - latest_toys
   - search_toys
   - type_list
-  - director_list
   - age_list
   - order_toy
-  - order_cinema
-  - order_price
-  - order_time
+  - order_deliveryMethod
   - order_count
+
 
 entities:
   - search_criteria
   - order_criteria
   - count_criteria
-  - cinema_criteria
-  - price_criteria
-  - time_criteria
+  - delivery_criteria
 
 slots:
   search_criteria:
@@ -41,24 +37,12 @@ slots:
     mappings:
       - type: from_entity
         entity: order_criteria
-  cinema_criteria:
+  delivery_criteria:
     type: text
     influence_conversation: true
     mappings:
       - type: from_entity
-        entity: cinema_criteria
-  price_criteria:
-    type: text
-    influence_conversation: true
-    mappings:
-      - type: from_entity
-        entity: price_criteria
-  time_criteria:
-    type: text
-    influence_conversation: true
-    mappings:
-      - type: from_entity
-        entity: time_criteria
+        entity: delivery_criteria
   count_criteria:
     type: text
     influence_conversation: true
@@ -70,17 +54,12 @@ slots:
     influence_conversation: true
     mappings:
       - type: custom
-  cinema_id:
+  delivery_id:
     type: text
     influence_conversation: true
     mappings:
       - type: custom
-  price_id:
-    type: text
-    influence_conversation: true
-    mappings:
-      - type: custom
-  time_id:
+  deliveryMethod:
     type: text
     influence_conversation: true
     mappings:
@@ -124,17 +103,12 @@ actions:
   - action_search_toys
   - action_age_list
   - action_type_list
-  - action_director_list
   - action_extract_toy
-  - action_select_cinema
-  - action_select_price
-  - action_select_time
+  - action_select_deliveryMethod
   - action_select_count
   - action_list_order
   - action_place_order
-  - action_list_cinema
-  - action_list_price
-  - action_list_time
+  - action_list_delivery_method
 
 session_config:
   session_expiration_time: 60

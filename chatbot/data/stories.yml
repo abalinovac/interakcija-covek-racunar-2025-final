@@ -33,15 +33,9 @@ stories:
   steps:
   - intent: order_toy
   - action: action_extract_toy
-  - action: action_list_cinema
-  - intent: order_cinema
-  - action: action_select_cinema
-  - action: action_list_price
-  - intent: order_price
-  - action: action_select_price
-  - action: action_list_time
-  - intent: order_time
-  - action: action_select_time
+  - action: action_list_delivery_method
+  - intent: order_deliveryMethod
+  - action: action_select_deliveryMethod  #do ovde ok
   - action: utter_choose_count
   - intent: order_count
   - action: action_select_count

@@ -9,8 +9,8 @@ import { Reservation } from './reservation/reservation';
 export const routes: Routes = [
     {path: '', component: Home, title: 'Home' },
     {path: 'about', component: About, title: 'About'},
-    {path: 'toy/:path/reservation', component: Reservation, title: 'Toy reservation'},
     {path: 'toy/:path', component: Toy, title: 'Toy'},
+    {path: 'toy/:path/reservation', component: Reservation, title: 'Toy reservation'},
     {path: 'login', component: Login, title: 'Login'},
     {path: 'profile', component: Profile, title: 'User profile'},
     {path: '**', redirectTo: '' }

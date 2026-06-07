@@ -36,8 +36,3 @@ rules:
   steps:
   - intent: type_list
   - action: action_type_list
-
-- rule: 'List directors'
-  steps:
-  - intent: director_list
-  - action: action_director_list

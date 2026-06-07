@@ -11,22 +11,28 @@ import { FormsModule } from "@angular/forms";
   styleUrl: './home.css'
 })
 export class Home {
+
   protected toys = signal<ToyModel[]>([])
-  protected previousSearch = 'N/A'
+  protected allToys: ToyModel[] = []
   protected search = ''
 
   constructor() {
     this.loadToys()
   }
 
-  protected loadToys() {
-    if (this.previousSearch == '' && this.search == '')
-      return
+  protected async loadToys() {
 
-    this.previousSearch = this.search
-    ToyService.getToys(this.search)
-      .then(rsp => this.toys.set(rsp.data))
+    // prvi put učitava sve igračke
+    if(this.allToys.length == 0){
+      const rsp = await ToyService.getToys()
+      this.allToys = rsp.data
+    }
+
+    // filtriranje
+    const filtered = this.allToys.filter(toy =>
+      toy.name.toLowerCase().includes(this.search.toLowerCase())
+    )
+
+    this.toys.set(filtered)
   }
 }
- 
-

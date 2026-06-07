@@ -26,7 +26,7 @@ class ActionHelloWorld(Action):
         dispatcher.utter_message(text="Hello World from Actions!")
         return []
     
-class ActionLatestToys(Action):
+class ActionLatestToys(Action):     #RADI
 
     def name(self) -> Text:
         return "action_latest_toys"
@@ -49,31 +49,48 @@ class ActionLatestToys(Action):
             dispatcher.utter_message(text='Not enought toys found') 
         return []
     
-class ActionSearchToys(Action):
+class ActionSearchToys(Action):     #RADI
 
     def name(self) -> Text:
         return "action_search_toys"
 
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        criteria=tracker.get_slot("search_criteria")
+        criteria = tracker.get_slot("search_criteria")
 
-        url = 'https://toy.pequla.com/api/toy?search=' + criteria
+        print("SEARCH CRITERIA:", criteria)
+
+        url = "https://toy.pequla.com/api/toy"
         rsp = requests.get(url)
         toys = rsp.json()
 
+        filtered_toys = []
+
+        if criteria:
+            filtered_toys = [
+                toy for toy in toys
+                if criteria.lower() in toy["name"].lower()
+            ]
+        else:
+            filtered_toys = toys
+
+        print("NUMBER OF RESULTS:", len(filtered_toys))
+
         dispatcher.utter_message(
-                text='Here are the search results for ' + criteria,
-                attachment={
+            text=f"Here are the search results for {criteria}",
+            attachment={
                 "type": "toy_list",
-                "data": toys
-               }
-            )
+                "data": filtered_toys
+            }
+        )
+
         return []
     
-class ActionAgeList(Action):
+class ActionAgeList(Action):          #RADI
 
     def name(self) -> Text:
         return "action_age_list"
@@ -94,7 +111,7 @@ class ActionAgeList(Action):
             )
         return []
 
-class ActionTypeList(Action):
+class ActionTypeList(Action):           #RADI
 
     def name(self) -> Text:
         return "action_type_list"
@@ -114,201 +131,124 @@ class ActionTypeList(Action):
                }
             )
         return []
-    
-class ActionDirectorList(Action):
-
-    def name(self) -> Text:
-        return "action_director_list"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        url = 'https://movie.pequla.com/api/director'
-        rsp = requests.get(url)
-
-        dispatcher.utter_message(
-                text='Here are all the available directors:',
-                attachment={
-                "type": "director_list",
-                "data": rsp.json()
-               }
-            )
-        return []
 
 class ActionExtractToy(Action):
 
     def name(self) -> Text:
         return "action_extract_toy"
 
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any]
+    ) -> List[Dict[Text, Any]]:
 
-        criteria=tracker.get_slot("order_criteria")
+        criteria = tracker.get_slot("order_criteria")
 
-        url = 'https://toy.pequla.com/api/toy?search=' + criteria
-        rsp = requests.get(url)
+        rsp = requests.get("https://toy.pequla.com/api/toy")
         toys = rsp.json()
 
-        if len(toys) > 0:
-            exact_toy = toys[0]
-            dispatcher.utter_message(text='Selected toy: '+ exact_toy['title'])
-            return [SlotSet('toy_permalink',exact_toy['shortUrl'])]
+        exact_toy = next(
+            (
+                toy for toy in toys
+                if criteria.lower() in toy["name"].lower()
+            ),
+            None
+        )
+
+        if exact_toy:
+            dispatcher.utter_message(
+                text=f"Selected toy: {exact_toy['name']}",
+                attachment={
+                    "type": "order_toy",
+                    "data": exact_toy
+                }
+            )
+
+            return [
+                SlotSet("toy_permalink", exact_toy["permalink"])
+            ]
         
-        dispatcher.utter_message(text='No toy for that criteria found!') 
+        dispatcher.utter_message(
+            text="No toy for that criteria found!"
+        )
+
         return []
     
-class ActionListCinema(Action):
+class ActionListDeliveryMethod(Action):
 
     def name(self) -> Text:
-        return "action_list_cinema"
+        return "action_list_delivery_method"
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
        
         dispatcher.utter_message(
-                text='Here are all the available cinemas:',
+                text='Here are all the available delivery methods:',
                 attachment={
                 "type": "simple_list",
-                "data": ['Ušće', 'Rakovica', 'Rajićeva', 'Ada']
+                "data": ['Dostava na kućnu adresu (Kurirska služba)', 'Preuzimanje u prodavnici (Beograd)', 'Preuzimanje u prodavnici (Novi Sad)']
                }
             )
-        return []
-    
-class ActionListPrice(Action):
-
-    def name(self) -> Text:
-        return "action_list_price"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-       
-        dispatcher.utter_message(
-                text='Here are all prices:',
-                attachment={
-                "type": "simple_list",
-                "data": ['Velika', 'Mala', 'Privatna']
-               }
-            )
-        return []
-    
-class ActionListTime(Action):
-
-    def name(self) -> Text:
-        return "action_list_time"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-       
-        dispatcher.utter_message(
-                text='Here are all the available timetables:',
-                attachment={
-                "type": "simple_list",
-                "data": ['Utorak 22h', 'Sreda 21h', 'Petak 20h', 'Petak 22h']
-               }
-            )
-        return []
+        return [] 
    
-class ActionSelectCinema(Action):
+class ActionSelectDeliveryMethod(Action):  #izmenjeno sve proveriti da li radi prilikom narudzbine
 
     def name(self) -> Text:
-        return "action_select_cinema"
+        return "action_select_deliveryMethod"
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        criteria = tracker.get_slot("cinema_criteria")
-        cinemas = ['Ušće', 'Rakovica', 'Rajićeva', 'Ada']
+        criteria = tracker.get_slot("delivery_criteria")
+        delivery = ['Dostava na kućnu adresu (Kurirska služba)', 'Preuzimanje u prodavnici (Beograd)', 'Preuzimanje u prodavnici (Novi Sad)']
         matched = []
 
         if criteria:
             normalized_criteria = normalize(criteria)
 
-            for cinema in cinemas:
-                if normalize(cinema) == normalized_criteria:
-                    matched.append(cinema)
+            for deliver in delivery:
+                if normalize(deliver) == normalized_criteria:
+                    matched.append(deliver)
 
         if len(matched) > 0:
-            exact_cinema = matched[0]
-            dispatcher.utter_message(text='Selected cinema: '+ exact_cinema)
-            return [SlotSet('cinema_id',exact_cinema)]
+            exact_delivery = matched[0]
+            dispatcher.utter_message(text='Selected delivery method: '+ exact_delivery)
+            return [SlotSet('delivery_id',exact_delivery)]
         
-        dispatcher.utter_message(text='No cinema for that criteria found!') 
+        dispatcher.utter_message(text='No delivery method for that criteria found!') 
         return []
     
-class ActionSelectPrice(Action):
+class ActionSelectDelivery(Action):
 
     def name(self) -> Text:
-        return "action_select_price"
+        return "action_select_delivery"
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        criteria = tracker.get_slot("price_criteria")
-        prices = ['Velika', 'Mala', 'Privatna']
+        criteria = tracker.get_slot("delivery_criteria")
+        delivery = ['Kurirska služba', 'Preuzimanje u prodavnici (Beograd)', 'Preuzimanje u prodavnici (Novi Sad)']
         matched = []
 
         if criteria:
             normalized_criteria = normalize(criteria)
 
-            for price in prices:
-                if normalize(price) == normalized_criteria:
-                    matched.append(price)
+            for deliver in delivery:
+                if normalize(deliver) == normalized_criteria:
+                    matched.append(deliver)
 
         if len(matched) > 0:
-            exact_price = matched[0]
-            dispatcher.utter_message(text='Selected price: '+ exact_price)
-            return [SlotSet('price_id',exact_price)]
+            exact_delivery = matched[0]
+            dispatcher.utter_message(text='Selected delivery method: '+ exact_delivery)
+            return [SlotSet('deliveryMethod',exact_delivery)]
         
-        dispatcher.utter_message(text='No prices for that criteria found!') 
+        dispatcher.utter_message(text='No delivery method for that criteria found!') 
         return []
-    
-class ActionSelectTime(Action):
-
-    def name(self) -> Text:
-        return "action_select_time"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        criteria = tracker.get_slot("time_criteria")
-        times = ['Utorak 22h', 'Sreda 21h', 'Petak 20h', 'Petak 22h']
-        matched = []
-
-        if criteria:
-            normalized_criteria = normalize(criteria)
-
-            for time in times:
-                if normalize(time) == normalized_criteria:
-                    matched.append(time)
-
-        if len(matched) > 0:
-            exact_time = matched[0]
-            dispatcher.utter_message(text='Selected time: '+ exact_time)
-            return [SlotSet('time_id',exact_time)]
-        
-        dispatcher.utter_message(text='No time for that criteria found!') 
-        return []
-    
-class ActionSelectCount(Action):
-
-    def name(self) -> Text:
-        return "action_select_time"
-    
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        criteria = tracker.get_slot("count_criteria")
-        dispatcher.utter_message(text='Selected count: '+ criteria)
-        return [SlotSet('ticket_count',criteria)]
     
 class ActionListOrder(Action):
 
@@ -320,11 +260,10 @@ class ActionListOrder(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
         order_list= [
-            'Movie: ' +  tracker.get_slot("movie_permalink"),
-            'Cienema: ' +  tracker.get_slot("cinema_id"),
+            'Toy: ' +  tracker.get_slot("toy_permalink"),
+            'Delivery method: ' +  tracker.get_slot("deliveryMethod"),  #videti za delivery
             'Price: ' +  tracker.get_slot("price_id"),
-            'Time: ' +  tracker.get_slot("time_id"),
-            'Count: ' +  tracker.get_slot("ticket_count"),
+            'Quantity: ' +  tracker.get_slot("quantity"),
         ]
 
         dispatcher.utter_message(
@@ -346,11 +285,10 @@ class ActionPlaceOrder(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
         order_details= {
-            "movie": tracker.get_slot("movie_permalink"),
-            "cinema": tracker.get_slot("cinema_id"),
-            "Price":  tracker.get_slot("price_id"),
-            "time": tracker.get_slot("time_id"),
-            "count": tracker.get_slot("ticket_count")
+            'Toy: ' +  tracker.get_slot("toy_permalink"),
+            'Delivery method: ' +  tracker.get_slot("deliveryMethod"),  #videti za delivery
+            'Price: ' +  tracker.get_slot("price_id"),
+            'Quantity: ' +  tracker.get_slot("quantity"),
         }
                
         dispatcher.utter_message(

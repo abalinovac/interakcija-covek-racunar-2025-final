@@ -46,7 +46,7 @@
                 <tr>
                     <th scope="col">Toy</th>
                     <th scope="col">Quantity</th>
-                    <th scope="col">Time</th>
+                    <th scope="col">Delivery</th>
                     <th scope="col">Status</th>
                     <th scope="col">Options</th>
                 </tr>
@@ -56,7 +56,7 @@
                 <tr>
                     <th scope="row">{{order.toyName}}</th>
                     <td>{{order.quantity}}</td>
-                    <td>{{order.time}}</td>
+                    <td>{{order.delivery}}</td>
                     <td>{{statusMap[order.status]}}</td>
                     <td>
                         @if(order.status == 'na'){
